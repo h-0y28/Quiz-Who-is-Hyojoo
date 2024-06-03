@@ -83,7 +83,7 @@ let selectedButton = null; // 전역 변수로 선택된 버튼을 저장
 
 function selectAnswer(e) {
     const clickedButton = e.target;
-    const answerText = clickedButton.innerText;
+    // const answerText = clickedButton.innerText;
     const correct = clickedButton.dataset.correct === 'true';
 
     // 이전에 선택된 버튼의 색상을 원래대로 변경
@@ -106,7 +106,6 @@ function selectAnswer(e) {
     } else {
         showScore();
     }
-    showSelectedAnswer(answerText);
 }
 
 // 다른 버튼을 누르기 전까지 선택된 버튼 강조 유지
