@@ -93,7 +93,7 @@ function selectAnswer(e) {
     selectedButton = clickedButton;
 
     if (correct) {
-        score++;
+        score+=100;
     }
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct === 'true');
