@@ -13,8 +13,8 @@ const questions = [
         answers: [
             { text: "Badminton", correct: false },
             { text: "Bowling", correct: true },
-            { text: "swimming", correct: false },
-            { text: "tennis", correct: false }
+            { text: "Swimming", correct: false },
+            { text: "Tennis", correct: false }
         ]
     },
     {
@@ -29,7 +29,7 @@ const questions = [
     {
         question: "What is Hyojoo's favorite season?",
         answers: [
-            { text: "spring", correct: true },
+            { text: "Spring", correct: true },
             { text: "Summer", correct: false },
             { text: "Fall", correct: false },
             { text: "Winter", correct: false }
@@ -41,7 +41,7 @@ const questions = [
             { text: "Falling into a sinkhole", correct: false },
             { text: "1 million won for the hospital fee", correct: false },
             { text: "Get hit by her brother", correct: false },
-            { text: "a wedding celebration performance", correct: true }
+            { text: "A wedding celebration performance", correct: true }
         ]
     }
 ];
@@ -55,12 +55,14 @@ const scoreElement = document.getElementById('score');
 
 let currentQuestionIndex = 0;
 let score = 0;
+let selectedButton = null;
 
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     nextButton.classList.add('hide');
     scoreContainer.classList.add('hide');
+    questionContainer.classList.remove('hide');
     showQuestion(questions[currentQuestionIndex]);
 }
 
@@ -79,19 +81,14 @@ function showQuestion(question) {
     });
 }
 
-let selectedButton = null; // 전역 변수로 선택된 버튼을 저장
-
 function selectAnswer(e) {
     const clickedButton = e.target;
-    // const answerText = clickedButton.innerText;
     const correct = clickedButton.dataset.correct === 'true';
 
-    // 이전에 선택된 버튼의 색상을 원래대로 변경
     if (selectedButton) {
         selectedButton.classList.remove('selected');
     }
 
-    // 현재 클릭된 버튼을 강조하고, 전역 변수에 저장
     clickedButton.classList.add('selected');
     selectedButton = clickedButton;
 
@@ -99,49 +96,31 @@ function selectAnswer(e) {
         score++;
     }
     Array.from(answerButtonsElement.children).forEach(button => {
-        setStatusClass(button, button.dataset.correct);
+        setStatusClass(button, button.dataset.correct === 'true');
     });
-    if (questions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide');
-    } else {
+    nextButton.classList.toggle('hide', !(questions.length > currentQuestionIndex + 1));
+    if (questions.length <= currentQuestionIndex + 1) {
         showScore();
     }
 }
 
-// 다른 버튼을 누르기 전까지 선택된 버튼 강조 유지
-function highlightSelectedButton() {
-    if (selectedButton) {
-        selectedButton.classList.add('selected');
-    }
-}
-
-
 function setStatusClass(element, correct) {
-    clearStatusClass(element);
-    if (correct) {
-        element.classList.add('correct');
-    } else {
-        element.classList.add('wrong');
-    }
-}
-
-function clearStatusClass(element) {
-    element.classList.remove('correct');
-    element.classList.remove('wrong');
+    element.classList.toggle('correct', correct);
+    element.classList.toggle('wrong', !correct);
 }
 
 function showScore() {
     questionContainer.classList.add('hide');
     nextButton.classList.add('hide');
     scoreContainer.classList.remove('hide');
-    scoreElement.innerText = score;
+    scoreElement.innerText = `Your score: ${score}`;
 }
 
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++;
     showQuestion(questions[currentQuestionIndex]);
-    highlightSelectedButton(); // 다음 버튼 클릭 후 선택된 버튼 강조 유지
+    selectedButton = null;
 });
 
-// Ensure the DOM is fully loaded before starting the quiz
+// 퀴즈를 시작하기 전에 DOM이 완전히 로드되었는지 확인
 document.addEventListener('DOMContentLoaded', startQuiz);
