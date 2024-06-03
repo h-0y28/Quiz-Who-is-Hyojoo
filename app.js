@@ -2,9 +2,9 @@ const questions = [
     {
         question: "When is Hyojoo's birthday?",
         answers: [
-            { text: "8/2", correct: false },
+            { text: "8/2", correct: true },
             { text: "8/4", correct: false },
-            { text: "8/22", correct: true },
+            { text: "8/22", correct: false },
             { text: "8/24", correct: false }
         ]
     },
