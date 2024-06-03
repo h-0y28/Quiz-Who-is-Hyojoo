@@ -43,15 +43,24 @@ const questions = [
             { text: "Get hit by her brother", correct: false },
             { text: "A wedding celebration performance", correct: true }
         ]
+    },
+    {
+        question: "What wasn't Hyojoo's childhood dream?",
+        answers: [
+            { text: "Police", correct: false },
+            { text: "Ballerina", correct: false },
+            { text: "Doctor", correct: true },
+            { text: "Teacher", correct: false }
+        ]
     }
 ];
 
-const questionContainer = document.getElementById('question-container');
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const nextButton = document.getElementById('next-btn');
 const scoreContainer = document.getElementById('score-container');
 const scoreElement = document.getElementById('score');
+const resultElement = document.getElementById('result');
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -62,20 +71,20 @@ function startQuiz() {
     score = 0;
     nextButton.classList.add('hide');
     scoreContainer.classList.add('hide');
-    questionContainer.classList.remove('hide');
+    questionElement.classList.remove('hide');
+    resultElement.classList.add('hide');
     showQuestion(questions[currentQuestionIndex]);
 }
 
 function showQuestion(question) {
     questionElement.innerText = question.question;
     answerButtonsElement.innerHTML = '';
+    resultElement.classList.add('hide');
     question.answers.forEach(answer => {
         const button = document.createElement('button');
         button.innerText = answer.text;
         button.classList.add('btn');
-        if (answer.correct) {
-            button.dataset.correct = answer.correct;
-        }
+        button.dataset.correct = answer.correct;
         button.addEventListener('click', selectAnswer);
         answerButtonsElement.appendChild(button);
     });
@@ -85,23 +94,34 @@ function selectAnswer(e) {
     const clickedButton = e.target;
     const correct = clickedButton.dataset.correct === 'true';
 
-    if (selectedButton) {
-        selectedButton.classList.remove('selected');
-    }
-
-    clickedButton.classList.add('selected');
-    selectedButton = clickedButton;
+    highlightSelectedButton(clickedButton);
 
     if (correct) {
-        score+=100;
+        score += 100;
+        resultElement.innerText = 'Correct!';
+    } else {
+        resultElement.innerText = 'Wrong!';
     }
+
+    resultElement.classList.remove('hide');
+
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct === 'true');
     });
-    nextButton.classList.toggle('hide', !(questions.length > currentQuestionIndex + 1));
-    if (questions.length <= currentQuestionIndex + 1) {
+
+    if (questions.length > currentQuestionIndex + 1) {
+        nextButton.classList.remove('hide');
+    } else {
         showScore();
     }
+}
+
+function highlightSelectedButton(button) {
+    if (selectedButton) {
+        selectedButton.classList.remove('selected');
+    }
+    button.classList.add('selected');
+    selectedButton = button;
 }
 
 function setStatusClass(element, correct) {
@@ -110,17 +130,22 @@ function setStatusClass(element, correct) {
 }
 
 function showScore() {
-    questionContainer.classList.add('hide');
+    
+    document.getElementById("question-container").classList.add('hide');
     nextButton.classList.add('hide');
     scoreContainer.classList.remove('hide');
-    scoreElement.innerText = `Your score: ${score}`;
+    scoreElement.innerText = `${score} / 600`;
+    if (score === 600) {
+        resultElement.innerText = 'Perfect Score!';
+        resultElement.classList.remove('hide');
+    }
 }
 
 nextButton.addEventListener('click', () => {
+    nextButton.classList.add('hide');
     currentQuestionIndex++;
     showQuestion(questions[currentQuestionIndex]);
     selectedButton = null;
 });
 
-// 퀴즈를 시작하기 전에 DOM이 완전히 로드되었는지 확인
 document.addEventListener('DOMContentLoaded', startQuiz);

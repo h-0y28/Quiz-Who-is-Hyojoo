@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Who is Hyo Joo</title>
+    <title>Quiz</title>
     <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="quiz-container">
         <div id="question-container">
-            <h2 id="question"></h2>
+            <div id="result" class="result hide"></div>
+            <h3 id="question"></h3>
             <div id="answer-buttons" class="btn-container"></div>
+            <button id="next-btn" class="btn hide">Next</button>
         </div>
-        <button id="next-btn" class="btn hide">Next</button>
         <div id="score-container" class="hide">
-            <h3>Your Score : <span id="score"></span></h3>
-            <h3>perfect score : 500</h3>
+            <h3>Score</h3>
+            <div id="score"></div>
         </div>
     </div>
-    <script src="app.js"></script>
+    <script src="quiz.js"></script>
 </body>
 </html>
